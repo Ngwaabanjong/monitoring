@@ -5,7 +5,7 @@ STEPS:
 
 2.  Generate an authentication token on SonarQube:
 	- Account --> my account --> Security --> Generate Tokens
-	- Caa80249b24ada457d144ba9cbfa670b879455cd
+	- xxxxxx49b24ada457xxxxxxxxfa670b879xxxxx
 
 3.  Create Credentials for token in Jenkins:
 	- Manage Jenkins --> manage credentials --> system --> Global credentials --> add credentials  - Credentials type: Secret text  -> Secret: insert the token  -> ID: sonarqube-key.
@@ -39,8 +39,8 @@ STEPS:
 9.  Create SonarQube properties file:
 	- Browse: sonarqube properties file
 **Property file Code:**
+- Filename with no extension: **sonar-project.properties**
 ``````
-Filename with no extension: sonar-project.properties
 sonar.verbose=true
 sonar.organization=<insert sonarqube organization key name>
 sonar.projectKey=<insert sonarqube project key name>
@@ -57,9 +57,8 @@ sonar.coverage.jacoco.xmlReportPaths=tagrget/site/jacoco/jacoco.xml
 
 11. Add SonarQube stage in the Jenkinsfile:
 	- Browse: sonarqube stage for Jenkinsfile.
-    
+
 11a. **Add SonqrQube Scanner Stage:**
-Code:
 ``````
   stage('SonarQube analysis') {
   environment {
