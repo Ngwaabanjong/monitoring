@@ -57,6 +57,7 @@ sonar.coverage.jacoco.xmlReportPaths=tagrget/site/jacoco/jacoco.xml
 
 11. Add SonarQube stage in the Jenkinsfile:
 	- Browse: sonarqube stage for Jenkinsfile.
+    
 11a. **Add SonqrQube Scanner Stage:**
 Code:
 ``````
