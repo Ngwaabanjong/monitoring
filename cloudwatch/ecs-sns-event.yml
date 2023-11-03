@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+        - Monitor OOM Stopped Tasks with EventBridge rules with AWS CloudFormation.
+
+Parameters:
+  EmailList:
+    Type: String
+    Description: "Email to notify!"
+    AllowedPattern: '[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[a-zA-Z]+'
+    Default: "mail@example.com"
+
+  SNSTopicName:
+    Type: String
+    Description: "Name for the notification topic."
+    AllowedPattern: '[a-zA-Z0-9_-]+'
+    Default: "oom-monitoring-topic"
+
+  MonitorStatus:
+    Type: String
+    Description: "Enable / Disable monitor."
+    AllowedValues:
+      - ENABLED
+      - DISABLED
+    Default: ENABLED
+
+Resources:
+  SNSMonitoringTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+        - Endpoint: !Ref EmailList
+          Protocol: email
+      TopicName: !Sub ${AWS::StackName}-${SNSTopicName}
+      
+  SNSMonitoringTopicTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      Topics:
+        - !Ref SNSMonitoringTopic
+      PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Sid: SnsOOMTopicPolicy
+            Effect: Allow
+            Principal:
+              Service: events.amazonaws.com
+            Action: [  'sns:Publish' ]
+            Resource: !Ref SNSMonitoringTopic
+          - Sid: AllowAccessToTopicOwner
+            Effect: Allow
+            Principal:
+              AWS: '*'
+            Action: [  'sns:GetTopicAttributes',
+                       'sns:SetTopicAttributes',
+                       'sns:AddPermission',
+                       'sns:RemovePermission',
+                       'sns:DeleteTopic',
+                       'sns:Subscribe',
+                       'sns:ListSubscriptionsByTopic',
+                       'sns:Publish',
+                       'sns:Receive' ]
+            Resource: !Ref SNSMonitoringTopic
+            Condition:
+              StringEquals:
+                'AWS:SourceOwner': !Ref 'AWS::AccountId'
+          
+  EventRule:
+    Type: AWS::Events::Rule
+    Properties:
+      Name: ECSStoppedTasksEvent
+      Description: Triggered when an Amazon ECS Task is stopped
+      EventPattern:
+        source:
+          - aws.ecs
+        detail-type:
+          - ECS Task State Change
+        detail:
+          desiredStatus:
+            - STOPPED
+          lastStatus:
+            - STOPPED
+          containers:
+            reason:
+              - prefix: "OutOfMemory"
+      State: !Ref MonitorStatus
+      Targets:
+        - Arn: !Ref SNSMonitoringTopic
+          Id: ECSOOMStoppedTasks
+          InputTransformer:
+            InputPathsMap:
+              taskArn: $.detail.taskArn
+            InputTemplate: >
+                "Task '<taskArn>' was stopped due to OutOfMemory."
