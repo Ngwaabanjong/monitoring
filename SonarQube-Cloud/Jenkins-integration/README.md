@@ -37,16 +37,16 @@ STEPS:
 
 8. ## Create Organization:
    Make sure you copy each name and key name on a nodepad.
-	- On profile: click Orgamizations -> create.
+	- On profile: click Organizations -> create.
 	- Create an Organization manually -> name -> key name.
 	- Free plan
         ## Create Project
-   	- In the create organization
+   	- In the created organization
    	- Create project -> name -> project key name
    	- On project click information to see details on the just created project. 
 
-10.  Create SonarQube properties file:
-	- Browse: sonarqube properties file
+10.  ## Create SonarQube properties file:
+      - *Browse:* sonarqube properties file
 **Property file Code:**
 - Filename with no extension: **sonar-project.properties**
 ``````
@@ -61,10 +61,10 @@ sonar.java.binaries=target/classes
 sonar.coverage.jacoco.xmlReportPaths=tagrget/site/jacoco/jacoco.xml
 ``````
 
-10. Add SonarQube properties file in Source Code Directory;
+10. ## Add SonarQube properties file in Source Code Directory;
 	- On your GitHub root add the file.
 
-11. Add SonarQube stage in the Jenkinsfile:
+11. ## Add SonarQube stage in the Jenkinsfile:
 	- Browse: sonarqube stage for Jenkinsfile.
 
 11a. **Add SonqrQube Scanner Stage:**
@@ -114,5 +114,4 @@ sonar.coverage.jacoco.xmlReportPaths=tagrget/site/jacoco/jacoco.xml
         }
       }
     }
-  }
   ```
