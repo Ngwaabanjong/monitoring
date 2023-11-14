@@ -21,7 +21,7 @@ STEPS:
 	- Manage Jenkins --> Configure System --> sonarqube server    
     - Add Sonarqube server    
     - Name: sonar-server    
-    - Server URL: https://sonarcloud.io/    
+    - Server URL: https://sonarcloud.io    
     - Server authentication token: sonarqube-key
 
 6.  ## Add SonarQube Scanner to Jenkins:
