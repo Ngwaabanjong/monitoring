@@ -69,9 +69,10 @@ sonar.coverage.jacoco.xmlReportPaths=tagrget/site/jacoco/jacoco.xml
 
 11a. **Add SonqrQube Scanner Stage:**
 ``````
-  stage('SonarQube analysis') {
-  environment {
-    scannerHome = tool 'sonarqube-scanner'
+    stage('SonarQube analysis') {
+    environment {
+      scannerHome = tool 'sonarqube-scanner'
+    }
   }
   ``````
 11b. **Add SonarQube Steps:**
@@ -114,4 +115,5 @@ sonar.coverage.jacoco.xmlReportPaths=tagrget/site/jacoco/jacoco.xml
         }
       }
     }
+  }  
   ```
