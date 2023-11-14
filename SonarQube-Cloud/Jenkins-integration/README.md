@@ -1,42 +1,48 @@
 STEPS:
-1. Create Account:
+1. ## Create Account:
 - https://sonarcloud.io/
 - Login: with GitHub Account
 
-2.  Generate an authentication token on SonarQube:
+2.  ## Generate an authentication token on SonarQube:
 	- Account --> my account --> Security --> Generate Tokens
 	- xxxxxx49b24ada457xxxxxxxxfa670b879xxxxx
 
-3.  Create Credentials for token in Jenkins:
+3.  ## Create Credentials for token in Jenkins:
 	- Manage Jenkins --> manage credentials --> system --> Global credentials --> add credentials  - Credentials type: Secret text  -> Secret: insert the token  -> ID: sonarqube-key.
 
-4.  Download SonarQube Scanner" plugin on Jenkins:
+4.  ## Download SonarQube Scanner" plugin on Jenkins:
 	- Manage Jenkins --> Available plugins     Search for sonarqube scanner.
 	- Make sure you download so you can see it in Jenkins.
 
-5.  Configure SonarQube Server:
+5.  ## Configure SonarQube Server:
 	- Manage Jenkins --> Configure System --> sonarqube server    
     - Add Sonarqube server    
     - Name: sonar-server    
     - Server URL: https://sonarcloud.io/    
     - Server authentication token: sonarqube-key
 
-6.  Add SonarQube server:
-	- Manage Jenkins --> Global Tool configuration --> SonarQube Server -> Add Sonarqube Server -> Give name: sonar-server
-	- Apply and Save
-
-7.  Add SonarQube Scanner to Jenkins:
+6.  ## Add SonarQube Scanner to Jenkins:
 	- Manage Jenkins --> tools --> Sonarqube scanner -> Add SonarQube Scanner  ->  Give name: sonarqube-scanner -> select latest version. 
 	- Apply and save.
 
-8.  Create Organization on Sonar Qube:
+7.  ## Create Organization on Sonar Qube:
 	- Profile -> my account -> Organization 
 	- Create Account -> name: mysonar1 -> Key: mysonar1-key -> Create
 	- Click on Analize new project
 	- Create project -> give prj name: myjkcicd -> Key: mysonar1-key_myjkcicd -> create
 	- On Information you will see the keys.
-	
-9.  Create SonarQube properties file:
+
+8. ## Create Organization:
+   Make sure you copy each name and key name on a nodepad.
+	- On profile: click Orgamizations -> create.
+	- Create an Organization manually -> name -> key name.
+	- Free plan
+        ## Create Project
+   	- In the create organization
+   	- Create project -> name -> project key name
+   	- On project click information to see details on the just created project. 
+
+10.  Create SonarQube properties file:
 	- Browse: sonarqube properties file
 **Property file Code:**
 - Filename with no extension: **sonar-project.properties**
@@ -75,6 +81,8 @@ sonar.coverage.jacoco.xmlReportPaths=tagrget/site/jacoco/jacoco.xml
 ``````
 12. On SonarQube:
 	- Go to project main directory and see report details.
+	- Click information
+	- Click main branch and view each page
 
 13. Quality Gates:
 	- SonarQube have inbuild quality Gates which defines the state of the code
