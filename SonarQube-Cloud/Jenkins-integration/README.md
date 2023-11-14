@@ -1,3 +1,6 @@
+# SonarQube Jenkins Integration
+- https://docs.sonarsource.com/sonarqube/9.8/analyzing-source-code/scanners/jenkins-extension-sonarqube/
+
 STEPS:
 1. ## Create Account:
 - https://sonarcloud.io/
@@ -79,12 +82,37 @@ sonar.coverage.jacoco.xmlReportPaths=tagrget/site/jacoco/jacoco.xml
     }
   }
 ``````
-12. On SonarQube:
+12. ## On SonarQube:
 	- Go to project main directory and see report details.
 	- Click information
 	- Click main branch and view each page
 
-13. Quality Gates:
+13. ## Quality Gates:
 	- SonarQube have inbuild quality Gates which defines the state of the code
 	- But we can Build a Manual Quality Gate which will determine if our code is a pass or fail.
-    - Go to your organization and see Qualify Gate features. 
+        - Go to your organization and see Qualify Gate features.
+      ## Add Quality Gate
+   	- Click: Quality Gate -> Create -> Name.
+        - *Add Conditions:* On Overall Code -> bugs:50, Code Smells:50,
+      ## Assign Quality gate to project
+        - *On project:* Administration -> Quality Gate -> select: newly created QG and save
+        - Now run your job and view the report.
+          
+14. ## Adding Quality Gate Analysis in Jenkinsfile
+       - this Stage help to control your code analysis.
+       - It will allow your job to run is the QG is passed
+       - It will fail your job if the QG is failed.
+    ```
+        stage("Quality Gate"){
+          steps {
+              script {
+              timeout(time: 1, unit: 'HOURS') { // Just in case something goes wrong, pipeline will be killed after a timeout
+          def qg = waitForQualityGate() // Reuse taskId previously collected by withSonarQubeEnv
+          if (qg.status != 'OK') {
+            error "Pipeline aborted due to quality gate failure: ${qg.status}"
+          }
+        }
+      }
+    }
+  }
+  ```
